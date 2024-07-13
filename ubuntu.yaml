@@ -1,0 +1,59 @@
+---
+- name: install tomcat on ubuntu
+  hosts: ubuntu
+  become: true
+  tasks:
+    - name: update and installing java package
+      ansible.builtin.apt:
+        name: "{{ java_package }}"
+        update_cache: true
+        state: present
+    - name: adding group
+      ansible.builtin.group:
+        name: "{{ group_name }}"
+        state: present
+    - name: adding user
+      ansible.builtin.user:
+        name: "{{ user_name }}"
+        create_home: true
+        group: "{{ group_name }}"
+        home: "{{ home_dir }}"
+        shell: "{{ default_shell }}"
+        state: present
+    - name: download tomcat and unzip
+      ansible.builtin.unarchive:
+        src: "https://dlcdn.apache.org/dist/tomcat/tomcat-10/v{{ tc_version }}/bin/apache-tomcat-{{ tc_version }}.tar.gz"
+        dest: "{{ home_dir }}"
+        creates: "{{ home_dir }}"
+        group: "{{ group_name }}"
+        owner: "{{ user_name }}"
+        remote_src: true
+    - name: creating symlink
+      ansible.builtin.file:
+        src: "{{ home_dir }}/apache-tomcat-{{ tc_version }}"
+        dest: "{{ home_dir }}/latest"
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
+        state: link
+    - name: change ownership
+      ansible.builtin.file:
+        path: "{{ home_dir }}"
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
+        state: "directory"
+        recurse: true
+    - name: convert files to executable format
+      ansible.builtin.shell:
+        cmd: chmod +x /opt/tomcat/latest/bin/*.sh
+        executable: /bin/bash
+    - name: creating systemd files
+      ansible.builtin.copy:
+        src: tomcat.service
+        dest: "/etc/systemd/system/tomcat.service"
+    - name: enabling server
+      ansible.builtin.systemd:
+        name: tomcat.service
+        daemon_reload: true
+        state: "started"
+    
+
