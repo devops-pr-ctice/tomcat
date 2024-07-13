@@ -34,7 +34,9 @@
         owner: "{{ user_name }}"
         group: "{{ group_name }}"
         remote_src: true
-        when: tomcat_stat.stat.exists == false
+        when: 
+          - tomcat_stat.stat.exists != true
+      notify: convert files to executable format
     - name: creating symlink
       ansible.builtin.file:
         src: "{{ home_dir }}/apache-tomcat-{{ tc_version }}"
@@ -49,10 +51,6 @@
         group: "{{ group_name }}"
         state: "directory"
         recurse: true
-    - name: convert files to executable format
-      ansible.builtin.shell:
-        cmd: chmod +x /opt/tomcat/latest/bin/*.sh
-        executable: /bin/bash
     - name: creating systemd files
       ansible.builtin.template:
         src: tomcat.service.j2
@@ -79,6 +77,9 @@
         name: tomcat.service
         enabled: true
         state: "restarted"
-    
+    - name: convert files to executable format
+      ansible.builtin.shell:
+        cmd: chmod +x /opt/tomcat/latest/bin/*.sh
+        executable: /bin/bash
 
 
