@@ -59,10 +59,10 @@
       ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
-        loop:
-          - {src: "tomcat-users.xml", dest: "/opt/tomcat/latest/conf/tomcat-users.xml"}
-          - {src: "manager_context.xml", dest: "/opt/tomcat/latest/webapps/manager/META-INF/context.xml"}
-          - {src: "host-manager-context.xml", dest: "/opt/tomcat/latest/webapps/host-manager/META-INF/context.xml"}
+      loop:
+        - {src: "tomcat-users.xml", dest: "/opt/tomcat/latest/conf/tomcat-users.xml"}
+        - {src: "manager_context.xml", dest: "/opt/tomcat/latest/webapps/manager/META-INF/context.xml"}
+        - {src: "host-manager-context.xml", dest: "/opt/tomcat/latest/webapps/host-manager/META-INF/context.xml"}
     - name: running tom cat
       ansible.builtin.systemd:
         name: tomcat.service
