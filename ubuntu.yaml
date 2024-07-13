@@ -46,7 +46,7 @@
         cmd: chmod +x /opt/tomcat/latest/bin/*.sh
         executable: /bin/bash
     - name: creating systemd files
-      ansible.builtin.copy:
+      ansible.builtin.template:
         src: tomcat.service.j2
         dest: "/etc/systemd/system/tomcat.service"
     - name: enable and running tom cat
@@ -56,4 +56,3 @@
         enabled: true
         state: "started"
     
-
