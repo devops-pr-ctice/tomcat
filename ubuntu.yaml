@@ -34,7 +34,7 @@
         owner: "{{ user_name }}"
         group: "{{ group_name }}"
         remote_src: true
-        when: tomcat_stat.stat.exists != true
+        when: tomcat_stat.stat.exists == false
     - name: creating symlink
       ansible.builtin.file:
         src: "{{ home_dir }}/apache-tomcat-{{ tc_version }}"
