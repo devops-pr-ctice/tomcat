@@ -20,6 +20,13 @@
         home: "{{ home_dir }}"
         shell: "{{ default_shell }}"
         state: present
+    - name: checking for tomcat presence
+      ansible.builtin.stat:
+        path: "{{ home_dir }}/apache-tomcat-{{ tc_version }}"
+      register: tomcat_stat
+    - name: printing tomcat folder stat
+      ansible.builtin.debug:
+        var: tomcat_stat.stat.exists
     - name: download tomcat and unzip
       ansible.builtin.unarchive:
         src: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tc_version }}/bin/apache-tomcat-{{ tc_version }}.tar.gz"
@@ -27,6 +34,7 @@
         owner: "{{ user_name }}"
         group: "{{ group_name }}"
         remote_src: true
+        when: tomcat_stat.stat.exists != true
     - name: creating symlink
       ansible.builtin.file:
         src: "{{ home_dir }}/apache-tomcat-{{ tc_version }}"
@@ -63,7 +71,10 @@
         - {src: "tomcat-users.xml", dest: "/opt/tomcat/latest/conf/tomcat-users.xml"}
         - {src: "manager_context.xml", dest: "/opt/tomcat/latest/webapps/manager/META-INF/context.xml"}
         - {src: "host-manager-context.xml", dest: "/opt/tomcat/latest/webapps/host-manager/META-INF/context.xml"}
-    - name: running tom cat
+      notify:
+        - restart tomcat
+  handlers: 
+    - name: restart tomcat
       ansible.builtin.systemd:
         name: tomcat.service
         enabled: true
