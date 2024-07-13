@@ -22,7 +22,7 @@
         state: present
     - name: download tomcat and unzip
       ansible.builtin.unarchive:
-        src: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        src: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tc_version }}/bin/apache-tomcat-{{ tc_version }}.tar.gz"
         dest: "{{ home_dir }}"
         owner: "{{ user_name }}"
         group: "{{ group_name }}"
