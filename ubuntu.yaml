@@ -34,8 +34,8 @@
         owner: "{{ user_name }}"
         group: "{{ group_name }}"
         remote_src: true
-        when: 
-          - tomcat_stat.stat.exists != true
+      when: 
+        - tomcat_stat.stat.exists != true
       notify: convert files to executable format
     - name: creating symlink
       ansible.builtin.file:
