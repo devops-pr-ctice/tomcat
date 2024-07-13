@@ -3,6 +3,10 @@
   hosts: ubuntu
   become: true
   tasks:
+    - name: checking distro type to start execution
+      ansible.builtin.fail:
+        msg: "sorry, this script is written for ubuntu distro"
+      when: ansible_facts.distribution != "Ubuntu"
     - name: update and installing java package
       ansible.builtin.apt:
         name: "{{ java_package }}"
