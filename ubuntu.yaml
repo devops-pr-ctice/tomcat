@@ -6,11 +6,10 @@
     - name: checking distro type to start execution
       ansible.builtin.fail:
         msg: "sorry, this script is written for ubuntu and RedHat distro's"
-      when: ansible_facts.distribution != "Ubuntu"
+      when: ansible_facts.distribution != "Ubuntu" and https://gitlab.com/devopsgp2/ansible/tomcat
     - name: update and installing java package
-      ansible.builtin.apt:
+      ansible.builtin.package:
         name: "{{ java_package }}"
-        update_cache: true
         state: present
     - name: adding group
       ansible.builtin.group:

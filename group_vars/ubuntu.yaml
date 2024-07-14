@@ -2,6 +2,6 @@ user_name: tomcat
 group_name: tomcat
 home_dir: "/opt/tomcat"
 default_shell: "/bin/false"
-java_package: openjdk-11-jdk
-java_home: /usr/lib/jvm/java-11-openjdk-amd64
+java_package: "{{'openjdk-11-jdk' if ansible_facts.distribution='Ubuntu' else 'java-11-openjdk-devel'}}"
+java_home: "{{'/usr/lib/jvm/java-11-openjdk-amd64' if ansible_facts.distribution='Ubuntu' else '/usr/lib/jvm/jre'}}"
 tc_version: 10.1.26
