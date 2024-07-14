@@ -3,6 +3,11 @@
   hosts: webservers
   become: true
   tasks:
+    - name: seting distribution variables
+      ansible.builtin.set_fact:
+        dist_type: "{{'Ubuntu' if ansible_facts.distribution == 'Ubuntu' else 'RedHat' if ansible_facts.distribution == 'RedHat'}}"
+        java_package: "{{'openjdk-11-jdk' if ansible_facts.distribution == 'Ubuntu' else 'java-11-openjdk-devel'}}"
+        java_home: "{{'/usr/lib/jvm/java-11-openjdk-amd64' if ansible_facts.distribution=='Ubuntu' else '/usr/lib/jvm/jre'}}"
     - name: checking distro type to start execution
       ansible.builtin.fail:
         msg: "sorry, this script is written for ubuntu and RedHat distro's"
