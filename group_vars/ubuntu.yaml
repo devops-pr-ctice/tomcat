@@ -1,5 +1,2 @@
-user_name: tomcat
-group_name: tomcat
-home_dir: "/opt/tomcat"
-default_shell: "/bin/false"
-tc_version: 10.1.26
+java_package: "openjdk-11-jdk"
+java_home: "/usr/lib/jvm/java-11-openjdk-amd64"
