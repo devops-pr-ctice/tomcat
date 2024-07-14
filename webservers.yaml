@@ -12,10 +12,10 @@
       when: ansible_facts.distribution != "Ubuntu" and ansible_facts.distribution != "RedHat"
     - name: include ubuntu specific variables
       include_vars: group_vars/Ubuntu.yaml
-      when: ansible_facts.distribution = "Ubuntu"
+      when: ansible_facts.distribution == "Ubuntu"
     - name: include RedHat specific variables
       include_vars: group_vars/RedHat.yaml
-      when: ansible_facts.distribution = "RedHat"
+      when: ansible_facts.distribution == "RedHat"
     - name: update and installing java package
       ansible.builtin.package:
         name: "{{ java_package }}"
